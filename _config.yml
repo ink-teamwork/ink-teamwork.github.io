@@ -2,7 +2,7 @@
 permalink:      /:year-:month-:day/:title
 
 # Setup
-title:          联合信任
+title:          小葵花妈妈课堂
 paginate:       5
 baseurl:        ""
 url:            "https://softime.github.io/unitrust"

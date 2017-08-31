@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+    
+      JsRender在项目中的使用 &middot; 联合信任
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+</head>
+
+
+  <body>
+    <nav class="nav">
+      <div class="nav-container">
+        <a href="/">
+          <h2 class="nav-title">联合信任</h2>
+        </a>
+        <ul>
+          <li><a href="http://localhost:4000/about">关于</a></li>
+          <li><a href="/">目录</a></li>
+        </ul>
+    </div>
+  </nav>
+
+    <main>
+      <div class="post">
+  <div class="post-info">
+    <span>作者：&nbsp;</span>萝卜
+
+    
+      <br>
+      <span>on&nbsp;</span><time datetime="2017-08-29 00:00:00 +0800">2017 08 29</time>
+    
+  </div>
+
+  <h1 class="post-title">JsRender在项目中的使用</h1>
+  <div class="post-line"></div>
+
+  <p>我们在进行WEB开发过程中经常会遇到一些通过AJAX从后台获得数据，然后在HTML页面上展示的场景。那么我们是怎么处理这种情况的呢?<br />
+是这样</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>"&lt;div id='alert_Modal'&gt;"
+    +"&lt;div class='alert_modal_title'&gt;"+"注册协议"+"&lt;/div&gt;"
+        +"&lt;div class='alert_contain'&gt;"
+            +"&lt;div class='alert_modal_content'&gt;"
+            + regprop
+            +"&lt;/div&gt;"
+        +"&lt;/div&gt;"
+        +"&lt;div class='alert_modal_bottom'&gt;"
+            +"&lt;button id='modal_close' onclick='modal_close()' class='cancel_btn1' &gt;关闭&lt;/button&gt;"
+        +"&lt;/div&gt;"
+    +"&lt;/div&gt;"
++"&lt;div id='alert_goodcover'&gt;&lt;/div&gt;"
+</code></pre>
+</div>
+<p>又或者是这样</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>var html = "";
+if (data.stateTask==1||data.stateTask==2) {
+    html = '&lt;td&gt;';
+    html +='&lt;span class="confirmation-evidence" onclick="cancelEvidence('+data.id+')"&gt;取消取证&lt;/span&gt;';
+    html +='&lt;/td&gt;';
+}
+if (data.stateTask==4) {
+    html = '&lt;td&gt;';
+    html +='&lt;span id="information" data-toggle="modal" data-target="#details" onclick="showinfo('+data.stateTask+","+data.id+')"&gt;查看详情&lt;/span&gt;';
+
+    html +='&lt;div class="btn-group"&gt;';
+    html +='&lt;button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"&gt;';
+    html +='更多操作';
+    html +='&lt;/button&gt;';
+    html +='&lt;ul class="dropdown-menu"&gt;';
+    // html +='&lt;li&gt;&lt;a href="#"&gt;分享&lt;/a&gt;&lt;/li&gt;';
+    html +='&lt;li&gt;&lt;a data-toggle="modal" onclick="confirmTask('+data.id+')"&gt;确认证据&lt;/a&gt;&lt;/li&gt;';
+    html +='&lt;li&gt;&lt;a data-toggle="modal" data-target="#giveUp" onclick="giveUpTask('+data.id+')"&gt;放弃证据&lt;/a&gt;&lt;/li&gt;';
+    html +='&lt;/ul&gt;';
+    /*html +='&lt;span class="confirmation-evidence" onclick="confirmTask('+data.id+')"&gt;确认证据&lt;/span&gt;';
+    html +='&lt;span class="last-span" data-toggle="modal" data-target="#giveUp" onclick="giveUpTask('+data.id+')"&gt;放弃证据&lt;/span&gt;';*/
+    html +='&lt;/td&gt;';
+}
+if(data.stateTask==5){
+    html = '&lt;td&gt;';
+    html +='&lt;span id="information" data-toggle="modal" data-target="#details" onclick="showinfo('+data.stateTask+","+data.id+')"&gt;查看详情&lt;/span&gt;';
+    html +='&lt;div class="btn-group"&gt;';
+    html +='&lt;button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"&gt;';
+    html +='更多操作';
+    html +='&lt;/button&gt;';
+    html +='&lt;ul class="dropdown-menu"&gt;';
+    html +='&lt;li&gt;&lt;a href="/evidence/downloadPDF?id='+data.id+'"&gt;下载&lt;/a&gt;&lt;/li&gt;';
+    // html +='&lt;li&gt;&lt;a href="#"&gt;分享&lt;/a&gt;&lt;/li&gt;';
+    html +='&lt;li&gt;&lt;a data-toggle="modal" data-target="#myModal" onclick="openRemarkBox('+data.id+')"&gt;备注&lt;/a&gt;&lt;/li&gt;';
+    html +='&lt;li&gt;&lt;a data-toggle="modal" data-target="#delete" onclick="deleteTask('+data.id+')"&gt;删除&lt;/a&gt;&lt;/li&gt;';
+    html +='&lt;/ul&gt;';
+    html +='&lt;/td&gt;';
+}
+return html;
+</code></pre>
+</div>
+<p>这样的代码无论从开发者还是维护者还是审查者来讲阅读起来都不是一种享受吧。&lt;/br&gt;
+很多时候网页的样式是有前端工程师来维护的</p>
+<h2 id="内容提要">内容提要</h2>
+<p>首先声明一下内容大部分是我抄来的</p>
+
+
+</div>
+
+<div class="pagination">
+  
+  
+    <a href="http://localhost:4000/2017-03-29/introducing-tale" class="right arrow">&#8594;</a>
+  
+
+  <a href="#" class="top">回到顶部</a>
+</div>
+
+    </main>
+
+    <footer>
+      <span>
+        &copy; <time datetime="2017-08-30 23:16:58 +0800">2017</time> 萝卜. Made with Jekyll using the <a href="https://github.com/chesterhow/tale/">Tale</a> theme.
+      </span>
+    </footer>
+  </body>
+</html>

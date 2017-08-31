@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+    
+      JsRender模板渲染 &middot; 小葵花妈妈课堂
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+</head>
+
+
+  <body>
+    <nav class="nav">
+      <div class="nav-container">
+        <a href="/">
+          <h2 class="nav-title">小葵花妈妈课堂</h2>
+        </a>
+        <ul>
+          <li><a href="https://softime.github.io/unitrust/about">关于</a></li>
+          <li><a href="/">目录</a></li>
+        </ul>
+    </div>
+  </nav>
+
+    <main>
+      <div class="post">
+  <div class="post-info">
+    <span>作者：&nbsp;</span>萝卜
+
+    
+      <br>
+      <span>on&nbsp;</span><time datetime="2017-08-29 00:00:00 +0800">2017 08 29</time>
+    
+  </div>
+
+  <h1 class="post-title">JsRender模板渲染</h1>
+  <div class="post-line"></div>
+
+  <h2 id="本文阅读对象">本文阅读对象</h2>
+
+<h4 id="后端开发同学前端开发同学other">后端开发同学、前端开发同学、Other</h4>
+
+<h2 id="我们遇到了什么">我们遇到了什么</h2>
+
+<ul>
+  <li>
+    <p>将AJAX获取的数据展示要界面上</p>
+  </li>
+  <li>
+    <p>列表根据数据不同的状态展示不同的操作选项</p>
+  </li>
+  <li>
+    <p>弹出层提示动态展示相关内容</p>
+  </li>
+</ul>
+
+<h2 id="我们是怎么处理的">我们是怎么处理的</h2>
+
+<p>请大家看一下以下两个代码片段</p>
+
+<p>弹出层</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>"&lt;div id='alert_Modal'&gt;"
+    +"&lt;div class='alert_modal_title'&gt;"+"注册协议"+"&lt;/div&gt;"
+        +"&lt;div class='alert_contain'&gt;"
+            +"&lt;div class='alert_modal_content'&gt;"
+            + regprop
+            +"&lt;/div&gt;"
+        +"&lt;/div&gt;"
+        +"&lt;div class='alert_modal_bottom'&gt;"
+            +"&lt;button id='modal_close' onclick='modal_close()' class='cancel_btn1' &gt;关闭&lt;/button&gt;"
+        +"&lt;/div&gt;"
+    +"&lt;/div&gt;"
++"&lt;div id='alert_goodcover'&gt;&lt;/div&gt;"
+</code></pre>
+</div>
+
+<p>列表操作</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>function getPic(data){
+    var urlName = data.url;
+    if(urlName.length&gt;16){
+        urlName = urlName.substring(0,16)+"...";
+    }
+    var html = "&lt;label style='font-weight: normal' onclick='hrefUrl("+data.id+")' id='userUrl' onmouseover='showPic(this)' onmouseout='hidePic(this)'&gt;"+urlName;
+    html += "&lt;div id='urlPath"+data.id+"' style='overflow:hidden;visibility:hidden'&gt;"+data.url+"&lt;/div&gt;";
+    html += "&lt;div&gt;&lt;img style='weight: 250px;height: 350px' src='/evidence/showImage?id="+data.id+"'&gt;&lt;/div&gt;&lt;/label&gt;";
+    return html;
+}
+</code></pre>
+</div>
+
+<h2 id="说出你的想法">说出你的想法</h2>
+
+<p>对以上两段代码不知大家有没有什么想说的？</p>
+
+<p>这个问题比较考研大家的忍耐性。</p>
+
+<h2 id="js模板渲染">JS模板渲染</h2>
+<p>先看一个简单的代码</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;div id="result"&gt;&lt;/div&gt;
+&lt;script id="template" type="text/x-jsrender"&gt;
+    {{:name}}
+&lt;/script&gt;
+&lt;script&gt;
+    var data = {
+        "name": "Pete"
+    };
+    var template = $.templates("#template");
+    var html = template.render(data);
+    $("#result").html(html);
+&lt;/script&gt;
+</code></pre>
+</div>
+
+<p>上面这个简单的示例就是今天要讲的JsRender模板渲染，接下来我用这种方式将上面两个代码片段改造一下：</p>
+
+<p>片段1</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;div id="result"&gt;&lt;/div&gt;
+&lt;script id="template" type="text/x-jsrender"&gt;
+    &lt;div id='alert_Modal'&gt;
+        &lt;div class='alert_modal_title'&gt;注册协议&lt;/div&gt;
+            &lt;div class='alert_contain'&gt;
+                &lt;div class='alert_modal_content'&gt;
+                    {{:regprop}}
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class='alert_modal_bottom'&gt;"
+                &lt;button id='modal_close' onclick='modal_close()' class='cancel_btn1' &gt;关闭&lt;/button&gt;
+            &lt;/div&gt;"
+        &lt;/div&gt;
+        &lt;div id='alert_goodcover'&gt;&lt;/div&gt;
+&lt;/script&gt;
+&lt;script&gt;
+    var data = {
+        "regprop": "注册协议"
+    };
+    var template = $.templates("#template");
+    var html = template.render(data);
+    $("#result").html(html);
+&lt;/script&gt;
+</code></pre>
+</div>
+
+<p>好了 第一个改造完了，其中里面暴露了一个问题，不知道你们发现没有？</p>
+
+<p>接下来再改造第二个
+片段2</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;script id="template" type="text/x-jsrender"&gt;
+    &lt;label style='font-weight: normal' onclick='hrefUrl({{:id}})' id='userUrl' onmouseover='showPic(this)' onmouseout='hidePic(this)'&gt;
+        {{:urlName}}
+        &lt;div id='{{:id}}' style='overflow:hidden;visibility:hidden'&gt;{{:url}}&lt;/div&gt;
+        &lt;div&gt;&lt;img style='weight: 250px;height: 350px' src='/evidence/showImage?id={{:id}}'&gt;&lt;/div&gt;
+    &lt;/label&gt;
+&lt;/script&gt;
+&lt;script&gt;
+    function getPic(data){
+        if(data.url.length&gt;16){
+            data.urlName = data.url.substring(0,16)+"...";
+        }
+        var template = $.templates("#template");
+        return template.render(data);
+    }
+&lt;/script&gt;
+</code></pre>
+</div>
+
+<p>代码这样改造后，js代码就与页面代码隔离开了。前端在编写静态页过程中，即使这个功能没有完成，也可以事先与后端约定好数据内容，再进行开发，这样最后就可以实现无缝对接。</p>
+
+<h2 id="总结">总结</h2>
+<p>以上只是简单讲了JsRender的基本便签{{:name}}，除了基本标签外，常用的还有 判断标签：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;script id="template" type="text/x-jsrender"&gt;
+    {{if count == 1}}
+        &lt;p&gt;welcome first!&lt;/p&gt;
+    {{else count == 2}}
+        &lt;p&gt;welcome again&lt;/p&gt;
+        &lt;p&gt;这里的else会被当做elseif count==2 使用&lt;/p&gt;
+    {{else}}
+        &lt;p&gt;welcom back!&lt;/p&gt;
+    {{/if}}
+&lt;/script&gt;
+</code></pre>
+</div>
+
+<p>循环标签：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;script id="template" type="text/x-jsrender"&gt;
+    {{for members}}
+        &lt;div&gt;{{:name}}&lt;/div&gt;
+    {{else}}
+        &lt;div&gt;No members!&lt;/div&gt;
+    {{/for}}
+&lt;/script&gt;
+</code></pre>
+</div>
+
+<p>其他还有很多标签，这里就不一一列明了，感兴趣的可以查阅相关资料，去官网查询详细文档  <a href="http://www.jsviews.com/">戳我去官网</a></p>
+
+
+</div>
+
+<div class="pagination">
+  
+  
+    <a href="https://softime.github.io/unitrust/2017-03-29/introducing-tale" class="right arrow">&#8594;</a>
+  
+
+  <a href="#" class="top">回到顶部</a>
+</div>
+
+    </main>
+
+    <footer>
+      <span>
+        &copy; <time datetime="2017-08-31 14:11:25 +0800">2017</time> 萝卜. Made with Jekyll using the <a href="https://github.com/chesterhow/tale/">Tale</a> theme.
+      </span>
+    </footer>
+  </body>
+</html>
